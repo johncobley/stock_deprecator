@@ -2,7 +2,7 @@
 
 namespace CurrentStock.Models
 {
-    public class StockItem : IEquatable<StockItem>
+    public class StockItem
     {
         /// <summary>
         /// The identifier of the type of this stock item
@@ -19,7 +19,9 @@ namespace CurrentStock.Models
         /// </summary>
         public int Quality { get; set; }
 
-        public override bool Equals(object obj) => Equals(obj as StockItem);
-        public bool Equals(StockItem other) => other != null && this.StockTypeId == other.StockTypeId && this.SellIn == other.SellIn && this.Quality == other.Quality;
-    }
+        /// <summary>
+        /// The associated <see cref="StockItemType"/>
+        /// </summary>
+        public StockItemType StockType { get; set; }
+ }
 }

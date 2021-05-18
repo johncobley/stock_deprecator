@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace StockDeprecatorMVC.Models
 {
     public class CurrentStockViewModel
     {
+        [Display(Name = "Current Stock List (update if required)")]
         public string StockList { get; set; }
     }
 }

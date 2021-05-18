@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using CurrentStock.DataAccess;
 using CurrentStock.Models;
@@ -7,7 +8,25 @@ namespace CurrentStock.Service
 {
     public class StockLineService : IStockLineService
     {
-        public StockItem ParseLine(string line)
+        /// <summary>
+        /// A repository used to retrieve the type of the stock when it is parsed.
+        /// </summary>
+        private readonly IStockTypeRepository _stockTypeRepository;
+
+        /// <summary>
+        /// Initialises a new instance.
+        /// </summary>
+        /// <param name="stockTypeRepository"></param>
+        public StockLineService(IStockTypeRepository stockTypeRepository)
+        {
+            if(stockTypeRepository == null)
+            {
+                throw new ArgumentException("Parameter should not be null.", nameof(stockTypeRepository));
+            }
+            this._stockTypeRepository = stockTypeRepository;
+        }
+
+        public async Task<StockItem> ParseLine(string line)
         {
             var splitLine = line.Trim().Split(" ").ToList();
             int quality;
@@ -30,6 +49,7 @@ namespace CurrentStock.Service
             return new StockItem
             {
                 StockTypeId = typeName,
+                StockType = await this._stockTypeRepository.Get(typeName),
                 SellIn = sellIn,
                 Quality = quality
             };

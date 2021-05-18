@@ -6,7 +6,7 @@ namespace CurrentStock.Models
 {
     public class IncreasingDeprecationRule : IDeprecationRule
     {
-        public int LastApplicableDay { get; set; }
+        public int FirstApplicableDay { get; set; }
 
         /// <summary>
         /// The amount to increase the quality by.

@@ -4,7 +4,6 @@ using System.Text;
 using CurrentStock.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using StockType.Models;
 
 namespace CurrentStock.DataAccess.File
 {
@@ -20,8 +19,11 @@ namespace CurrentStock.DataAccess.File
 
             switch(jo["RuleType"].ToString())
             {
-                case var standardRuleType when standardRuleType ==  nameof(DecreasingDeprecationRule):
+                case var decreasingRuleType when decreasingRuleType ==  nameof(DecreasingDeprecationRule):
                     deprecationRule = new DecreasingDeprecationRule();
+                    break;
+                case var increasingRuleType when increasingRuleType == nameof(IncreasingDeprecationRule):
+                    deprecationRule = new IncreasingDeprecationRule();
                     break;
                 case var zeroRuleType when zeroRuleType == nameof(ZeroDeprecationRule):
                     deprecationRule = new ZeroDeprecationRule();
@@ -30,7 +32,13 @@ namespace CurrentStock.DataAccess.File
 
             if (deprecationRule != null)
             {
-                serializer.Populate(reader, deprecationRule);
+                serializer.Populate(jo.CreateReader(), deprecationRule);
+            }
+
+            // If the JSON doesn't contain a value for "FirstApplicableDay" assume it is essentially ongoing.
+            if (jo["FirstApplicableDay"] == null)
+            {
+                deprecationRule.FirstApplicableDay = int.MaxValue;
             }
 
             return deprecationRule;

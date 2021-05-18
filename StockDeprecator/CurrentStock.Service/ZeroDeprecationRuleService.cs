@@ -9,12 +9,11 @@ namespace CurrentStock.Service
     {
         public bool RunRule(ZeroDeprecationRule rule, StockItem stockItem)
         {
-            if(rule.LastApplicableDay > stockItem.SellIn)
+            if(rule.FirstApplicableDay < stockItem.SellIn)
             {
                 return false;
             }
 
-            stockItem.SellIn--;
             stockItem.Quality = 0;
 
             return true;

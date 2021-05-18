@@ -10,35 +10,11 @@ namespace CurrentStock.Tests
     public class IncreasingDeprecationRuleTests
     {
         [Fact]
-        public void IncreasesQualityWhenSellInIsGreaterThanLastApplicableDay()
+        public void IncreasesQualityWhenSellInIsLessThanFirstApplicableDay()
         {
             var testRule = new IncreasingDeprecationRule
             {
-                LastApplicableDay = 3,
-                Amount = 2
-            };
-
-            var testStock = new StockItem
-            {
-                StockTypeId = "Stock 1",
-                SellIn = 5,
-                Quality = 5
-            };
-
-            var service = new IncreasingDeprecationRuleService();
-            var result = service.RunRule(testRule, testStock);
-
-            Assert.True(result);
-            Assert.Equal(4, testStock.SellIn);
-            Assert.Equal(7, testStock.Quality);
-        }
-
-        [Fact]
-        public void IncreasesQualityWhenSellInIsEqualLastApplicableDay()
-        {
-            var testRule = new IncreasingDeprecationRule
-            {
-                LastApplicableDay = 3,
+                FirstApplicableDay = 5,
                 Amount = 2
             };
 
@@ -53,23 +29,45 @@ namespace CurrentStock.Tests
             var result = service.RunRule(testRule, testStock);
 
             Assert.True(result);
-            Assert.Equal(2, testStock.SellIn);
             Assert.Equal(7, testStock.Quality);
         }
 
         [Fact]
-        public void NoChangeWhenSellInIsLessThanLastApplicableDay()
+        public void IncreasesQualityWhenSellInIsEqualLastApplicableDay()
         {
             var testRule = new IncreasingDeprecationRule
             {
-                LastApplicableDay = 3,
+                FirstApplicableDay = 3,
                 Amount = 2
             };
 
             var testStock = new StockItem
             {
                 StockTypeId = "Stock 1",
-                SellIn = 2,
+                SellIn = 3,
+                Quality = 5
+            };
+
+            var service = new IncreasingDeprecationRuleService();
+            var result = service.RunRule(testRule, testStock);
+
+            Assert.True(result);
+            Assert.Equal(7, testStock.Quality);
+        }
+
+        [Fact]
+        public void NoChangeWhenSellInIsGreaterThanFirstApplicableDay()
+        {
+            var testRule = new IncreasingDeprecationRule
+            {
+                FirstApplicableDay = 2,
+                Amount = 2
+            };
+
+            var testStock = new StockItem
+            {
+                StockTypeId = "Stock 1",
+                SellIn = 3,
                 Quality = 5
             };
 
@@ -77,7 +75,6 @@ namespace CurrentStock.Tests
             var result = service.RunRule(testRule, testStock);
 
             Assert.False(result);
-            Assert.Equal(2, testStock.SellIn);
             Assert.Equal(5, testStock.Quality);
         }
     }

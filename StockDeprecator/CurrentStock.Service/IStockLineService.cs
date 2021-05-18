@@ -10,6 +10,6 @@ namespace CurrentStock.Service
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        StockItem ParseLine(string line);
+        Task<StockItem> ParseLine(string line);
     }
 }

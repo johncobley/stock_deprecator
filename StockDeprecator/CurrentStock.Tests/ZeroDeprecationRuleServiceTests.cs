@@ -7,20 +7,20 @@ using Xunit;
 
 namespace CurrentStock.Tests
 {
-    public class ZeroDeprecatioRuleServiceTests
+    public class ZeroDeprecationRuleServiceTests
     {
         private ZeroDeprecationRule TestRule => new ZeroDeprecationRule
         {
-            LastApplicableDay = 3
+            FirstApplicableDay = 2
         };
 
         [Fact]
-        public void SetsQualityToZeroWhenSellInIsGreaterThanLastApplicableDay()
+        public void SetsQualityToZeroWhenSellInIsLessThanFirstApplicableDay()
         {
             var testStock = new StockItem
             {
                 StockTypeId = "Stock 1",
-                SellIn = 5,
+                SellIn = 1,
                 Quality = 5
             };
 
@@ -28,30 +28,11 @@ namespace CurrentStock.Tests
             var result = service.RunRule(this.TestRule, testStock);
 
             Assert.True(result);
-            Assert.Equal(4, testStock.SellIn);
             Assert.Equal(0, testStock.Quality);
         }
 
         [Fact]
-        public void SetsQualityToZeroWhenSellInIsEqualLastApplicableDay()
-        {
-            var testStock = new StockItem
-            {
-                StockTypeId = "Stock 1",
-                SellIn = 3,
-                Quality = 5
-            };
-
-            var service = new ZeroDeprecationRuleService();
-            var result = service.RunRule(this.TestRule, testStock);
-
-            Assert.True(result);
-            Assert.Equal(2, testStock.SellIn);
-            Assert.Equal(0, testStock.Quality);
-        }
-
-        [Fact]
-        public void NoChangeWhenSellInIsLessThanLastApplicableDay()
+        public void SetsQualityToZeroWhenSellInIsEqualFirstApplicableDay()
         {
             var testStock = new StockItem
             {
@@ -63,8 +44,24 @@ namespace CurrentStock.Tests
             var service = new ZeroDeprecationRuleService();
             var result = service.RunRule(this.TestRule, testStock);
 
+            Assert.True(result);
+            Assert.Equal(0, testStock.Quality);
+        }
+
+        [Fact]
+        public void NoChangeWhenSellInIsGreaterThanFirstApplicableDay()
+        {
+            var testStock = new StockItem
+            {
+                StockTypeId = "Stock 1",
+                SellIn = 3,
+                Quality = 5
+            };
+
+            var service = new ZeroDeprecationRuleService();
+            var result = service.RunRule(this.TestRule, testStock);
+
             Assert.False(result);
-            Assert.Equal(2, testStock.SellIn);
             Assert.Equal(5, testStock.Quality);
         }
     }

@@ -10,8 +10,11 @@ namespace CurrentStock.Service
     {
         public static void ConfigureServices(IServiceCollection services)
         {
-            services.AddTransient<IStockLineService, StockLineService>();
-            services.AddTransient<IDeprecationRuleService<ZeroDeprecationRule>, ZeroDeprecationRuleService>();
+            services.AddSingleton<IStockLineService, StockLineService>();
+            services.AddSingleton<IDeprecationService, DeprecationService>();
+            services.AddSingleton<IDeprecationRuleService<DecreasingDeprecationRule>, DecreasingDeprecationRuleService>();
+            services.AddSingleton<IDeprecationRuleService<IncreasingDeprecationRule>, IncreasingDeprecationRuleService>();
+            services.AddSingleton<IDeprecationRuleService<ZeroDeprecationRule>, ZeroDeprecationRuleService>();
         }
     }
 }

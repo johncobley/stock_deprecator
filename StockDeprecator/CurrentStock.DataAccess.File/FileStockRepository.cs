@@ -18,12 +18,12 @@ namespace CurrentStock.DataAccess.File
         /// <summary>
         /// The stock service
         /// </summary>
-        private IStockLineService _stockService;
+        private readonly IStockLineService _stockService;
 
         /// <summary>
         /// The cache service;
         /// </summary>
-        private IMemoryCache _memoryCacheService;
+        private readonly IMemoryCache _memoryCacheService;
 
         /// <summary>
         /// A key used to store/retrieve the stock data.
@@ -34,6 +34,7 @@ namespace CurrentStock.DataAccess.File
         /// Constructs a new <see cref="FileStockRepository"/> instance.
         /// </summary>
         /// <param name="stockService">A <see cref="IStockLineService"/> instance.</param>
+        /// <param name="stockTypeRepository">A <see cref="IStockTypeRepository"/> instance.</param>
         /// <param name="memoryCacheService">A <see cref="IMemoryCache"/> instance</param>
         public FileStockRepository(IStockLineService stockService, IMemoryCache memoryCacheService)
         {
@@ -43,6 +44,7 @@ namespace CurrentStock.DataAccess.File
 
         public async Task<IEnumerable<StockItem>> Search(StockSearchFilter searchFilter)
         {
+            var type = await new FileStockTypeRepository(this._memoryCacheService).Get("Aged Brie");
             if (!this._memoryCacheService.TryGetValue<List<StockItem>>(FileStockRepository.cacheKey, out var stock))
             {
                 stock = new List<StockItem>();
@@ -79,10 +81,15 @@ namespace CurrentStock.DataAccess.File
             string line;
             while ((line = await reader.ReadLineAsync()) != null)
             {
-                stock.Add(this._stockService.ParseLine(line));
+                stock.Add(await this._stockService.ParseLine(line));
             }
 
-            this._memoryCacheService.Set(FileStockRepository.cacheKey, stock);
+            this.Save(stock);
+        }
+
+        public void Save(IEnumerable<StockItem> currentStockItems)
+        {
+            this._memoryCacheService.Set(FileStockRepository.cacheKey, currentStockItems);
         }
     }
 }

@@ -20,5 +20,6 @@ namespace CurrentStock.DataAccess
         /// <param name="stockData"></param>
         /// <returns></returns>
         Task Save(string stockData);
+        void Save(IEnumerable<StockItem> currentStockItems);
     }
 }

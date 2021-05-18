@@ -1,5 +1,51 @@
 [
   {
-    "TypeName":  "Aged Brie"
+    "TypeName": "Christmas Crackers",
+    "DeprecationRules": [
+      {
+        "RuleType": "IncreasingDeprecationRule",
+        "Amount": 2,
+        "FirstApplicableDay": 10
+      },
+      {
+        "RuleType": "IncreasingDeprecationRule",
+        "Amount": 3,
+        "FirstApplicableDay": 5
+      },
+      {
+        "RuleType": "ZeroDeprecationRule",
+        "FirstApplicableDay": 0
+      }
+    ]
+  },
+  {
+    "TypeName": "Aged Brie",
+    "DeprecationRules": [
+      {
+        "RuleType": "IncreasingDeprecationRule",
+        "Amount": "1"
+      }
+    ]
+  },
+  {
+    "TypeName": "Frozen Item",
+    "DeprecationRules": [
+      {
+        "RuleType": "DecreasingDeprecationRule",
+        "Amount": "1"
+      }
+    ]
+  },
+  {
+    "TypeName": "Fresh Item",
+    "DeprecationRules": [
+      {
+        "RuleType": "DecreasingDeprecationRule",
+        "Amount": "2"
+      }
+    ]
+  },
+  {
+    "TypeName": "Soap"
   }
 ]

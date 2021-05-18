@@ -1,0 +1,26 @@
+﻿@model DeprecatedStockViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Stock</h1>
+<div class="container">
+    <div class="row">
+        <div class="col-sm">
+            <h4>Original Stock List</h4>
+        </div>
+        <div class="col-sm">
+            <h4>Deprecation Result</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm">
+            @Html.Raw(Model.StockList)
+        </div>
+        <div class="col-sm">
+            @Html.Raw(Model.DeprecatedStock)
+        </div>
+    </div>
+</div>
+<a asp-area="" asp-controller="CurrentStock" asp-action="Index">Back</a>

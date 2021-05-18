@@ -5,8 +5,6 @@
         /// <summary>
         /// The minimum number of days the rule is valid.
         /// </summary>
-        int LastApplicableDay { get; set; }
-
-
+        int FirstApplicableDay { get; set; }
     }
 }
